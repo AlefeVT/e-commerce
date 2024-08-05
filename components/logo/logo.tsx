@@ -1,4 +1,4 @@
-import { AiOutlineDeploymentUnit } from "react-icons/ai";
+import { AiOutlineDeploymentUnit } from 'react-icons/ai';
 
 export function InitialLogo() {
   return (

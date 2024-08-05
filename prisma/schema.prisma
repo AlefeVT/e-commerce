@@ -1,7 +1,8 @@
 // prisma/schema.prisma
+// prisma/schema.prisma
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -74,4 +75,29 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  description String
+  status      ProductStatus
+  price       Float
+  images      String[]
+  category    Category
+  isFeatured  Boolean       @default(false)
+
+  createdAt DateTime @default(now())
+}
+
+enum ProductStatus {
+  rascunho
+  publicado
+  arquivado
+}
+
+enum Category {
+  masculino
+  feminino
+  infantil
 }
