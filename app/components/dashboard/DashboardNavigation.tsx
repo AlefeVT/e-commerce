@@ -18,8 +18,8 @@ const links = [
     href: '/dashboard/products',
   },
   {
-    name: 'Categorias',
-    href: '/dashboard/categories',
+    name: 'Imagens dos banners',
+    href: '/dashboard/banner',
   },
 ];
 export function DashboardNavigation() {

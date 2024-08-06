@@ -150,7 +150,7 @@ export function EditForm({ data }: iAppProps) {
               <Switch
                 key={fields.isFeatured.key}
                 name={fields.isFeatured.name}
-                checked={data.isFeatured}
+                defaultChecked={data.isFeatured}
               />
 
               <p className="text-red-500">
