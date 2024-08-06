@@ -6,7 +6,7 @@ import { parseWithZod } from '@conform-to/zod';
 import { PrismaClient } from '@prisma/client';
 
 import { promises as fs } from 'fs';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import path from 'path';
 
 export async function createProduct(prevState: unknown, fromdata: FormData) {
@@ -37,7 +37,7 @@ export async function createProduct(prevState: unknown, fromdata: FormData) {
       price: submission.value.price,
       images: flattenUrls,
       category: submission.value.category,
-      isFeatured: submission.value.isFeatured,
+      isFeatured: submission.value.isFeatured === true ? true: false,
     },
   });
 
@@ -73,13 +73,55 @@ export async function editProduct(prevState: any, formData: FormData) {
       description: submission.value.description,
       category: submission.value.category,
       price: submission.value.price,
-      isFeatured: submission.value.isFeatured,
+      isFeatured: submission.value.isFeatured === true ? true: false,
       status: submission.value.status,
       images: flattenUrls,
     },
   });
 
   redirect('/dashboard/products');
+}
+
+export async function deleteProduct(formData: FormData) {
+  const prisma = new PrismaClient();
+  const user = await currentUser();
+
+  if (!user) {
+    redirect('/auth/login');
+  }
+
+  const product = await prisma.product.findUnique({
+    where: {
+      id: formData.get("productId") as string,
+    },
+    select: {
+      images: true,
+    },
+  });
+
+  if (!product) {
+    throw new Error('Product not found');
+  }
+
+  const filePaths = product.images; 
+
+  for (const filePath of filePaths) {
+    const fullFilePath = path.join(process.cwd(), 'public', filePath);
+    try {
+      await fs.unlink(fullFilePath);
+      console.log(`File ${filePath} deleted successfully`);
+    } catch (err) {
+      console.error(`Failed to delete file ${filePath}:`, err);
+    }
+  }
+
+  await prisma.product.delete({
+    where: {
+      id: formData.get("productId") as string,
+    },
+  });
+
+  redirect("/dashboard/products");
 }
 
 export async function getProducts() {
@@ -89,6 +131,22 @@ export async function getProducts() {
       createdAt: 'desc',
     },
   });
+
+  return data;
+}
+
+export async function getProductEdit(productId: string) {
+  const prisma = new PrismaClient();
+
+  const data = await prisma.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+
+  if (!data) {
+    return notFound();
+  }
 
   return data;
 }
