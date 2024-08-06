@@ -28,7 +28,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default async function ProductRoute() {
-  const data = await getProducts()
+  const data = await getProducts();
   return (
     <>
       <div className="flex items-center justify-end">
@@ -62,12 +62,20 @@ export default async function ProductRoute() {
               {data.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>
-                    <Image alt='Imagem do Produto' src={item.images[0]} height={64} width={64} className='rounded-md object-cover h-16 w-16' />
+                    <Image
+                      alt="Imagem do Produto"
+                      src={item.images[0]}
+                      height={64}
+                      width={64}
+                      className="rounded-md object-cover h-16 w-16"
+                    />
                   </TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.status}</TableCell>
-                  <TableCell>{item.price}</TableCell>
-                  <TableCell>15/06/2024</TableCell>
+                  <TableCell>R$ {item.price}</TableCell>
+                  <TableCell>
+                    {new Intl.DateTimeFormat('pt-BR').format(item.createdAt)}
+                  </TableCell>
                   <TableCell className="text-end">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -78,7 +86,11 @@ export default async function ProductRoute() {
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Ações</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Editar</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/dashboard/products/${item.id}`}>
+                            Editar
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Deletar</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
