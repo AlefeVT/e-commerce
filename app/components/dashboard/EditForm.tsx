@@ -31,9 +31,9 @@ import { useFormState } from 'react-dom';
 import { parseWithZod } from '@conform-to/zod';
 import { editProduct } from '@/app/actions';
 import { useForm } from '@conform-to/react';
-import { productSchema } from '@/lib/zodSchemas';
 import Image from 'next/image';
 import { type $Enums } from '@prisma/client';
+import { productSchema } from '@/schemas';
 
 interface iAppProps {
   data: {

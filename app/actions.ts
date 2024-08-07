@@ -1,7 +1,7 @@
 'use server';
 
 import { currentUser } from '@/lib/auth';
-import { productSchema } from '@/lib/zodSchemas';
+import { bannerSchema, productSchema } from '@/schemas';
 import { parseWithZod } from '@conform-to/zod';
 import { PrismaClient } from '@prisma/client';
 
@@ -177,4 +177,58 @@ export async function saveImageToPublic(formData: FormData): Promise<string> {
     console.error('Erro ao salvar a imagem:', error);
     throw new Error(`Erro ao salvar a imagem`);
   }
+}
+
+export async function createBanner(prevState: any, formData: FormData) {
+  const user = await currentUser();
+  const prisma = new PrismaClient();
+
+  if(!user) {
+    redirect('/auth/login');
+  }
+
+  const submission = parseWithZod(formData, {
+    schema: bannerSchema,
+  });
+
+  if(submission.status !== 'success') {
+    return submission.reply();
+  }
+
+  await prisma.banner.create({
+    data: {
+      title: submission.value.title,
+      imageString: submission.value.imageString
+    },
+  });
+
+  redirect('/dashboard/banner');
+}
+
+export async function getBanners() {
+  const prisma = new PrismaClient();
+  const data = await prisma.banner.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  return data;
+}
+
+export async function deleteBanner(formData: FormData) {
+  const prisma = new PrismaClient();
+  const user = await currentUser();
+
+  if(!user) {
+    redirect('/auth/login');
+  }
+
+  await prisma.banner.delete({
+    where: {
+      id: formData.get('bannerId') as string,
+    }
+  })
+
+  redirect('/dashboard/banner');
 }

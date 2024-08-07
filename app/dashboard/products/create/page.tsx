@@ -27,12 +27,12 @@ import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { productSchema } from '@/lib/zodSchemas';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { categories } from '@/lib/categories';
 import { SubmitButton } from '@/app/components/SubmitButtons';
+import { productSchema } from '@/schemas';
 
 export default function ProductCreateRoute() {
   const [images, setImages] = useState<string[]>([]);
