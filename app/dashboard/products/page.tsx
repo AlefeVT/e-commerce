@@ -1,4 +1,3 @@
-import { getProducts } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -26,6 +25,7 @@ import {
 import { MoreHorizontal, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getProducts } from './actions';
 
 export default async function ProductRoute() {
   const data = await getProducts();
@@ -93,7 +93,7 @@ export default async function ProductRoute() {
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link href={`/dashboard/products/${item.id}/delete`}>
-                          Deletar
+                            Deletar
                           </Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>

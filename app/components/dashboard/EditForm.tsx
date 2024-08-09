@@ -29,11 +29,11 @@ import { categories } from '@/lib/categories';
 import { useState } from 'react';
 import { useFormState } from 'react-dom';
 import { parseWithZod } from '@conform-to/zod';
-import { editProduct } from '@/app/actions';
 import { useForm } from '@conform-to/react';
 import Image from 'next/image';
 import { type $Enums } from '@prisma/client';
 import { productSchema } from '@/schemas';
+import { editProduct } from '@/app/dashboard/products/actions';
 
 interface iAppProps {
   data: {
