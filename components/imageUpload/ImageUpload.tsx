@@ -55,10 +55,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         }
       }
       setSelectedFiles([]);
-      if(onClientUploadComplete){
+      if (onClientUploadComplete) {
         onClientUploadComplete(uploadedFiles);
       }
-
     } catch (error) {
       console.error(error);
       toast.error('Erro ao carregar imagens.');

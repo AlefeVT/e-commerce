@@ -6,17 +6,17 @@ import { useFormStatus } from 'react-dom';
 
 interface buttonProps {
   text: string;
-  variant?: 
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link"
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
     | null
     | undefined;
 }
-export function SubmitButton({text, variant}: buttonProps) {
+export function SubmitButton({ text, variant }: buttonProps) {
   const { pending } = useFormStatus();
   return (
     <>
@@ -26,7 +26,9 @@ export function SubmitButton({text, variant}: buttonProps) {
           Por favor, aguarde
         </Button>
       ) : (
-        <Button variant={variant} type="submit">{text}</Button>
+        <Button variant={variant} type="submit">
+          {text}
+        </Button>
       )}
     </>
   );
