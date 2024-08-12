@@ -3,6 +3,8 @@ import { getProduct } from './actions';
 import { ShoppingBag, StarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FeaturedProduct } from '@/app/components/storefront/FeaturedProducts';
+import { addItem } from '../../actions';
+import { ShoppingBagButton } from '@/app/components/SubmitButtons';
 
 export default async function ProductIdRoute({
   params,
@@ -10,6 +12,7 @@ export default async function ProductIdRoute({
   params: { id: string };
 }) {
   const data = await getProduct(params.id);
+  const addProducttoShoppingCart = addItem.bind(null, data.id);
 
   return (
     <>
@@ -29,9 +32,9 @@ export default async function ProductIdRoute({
           </div>
           <p className="text-base text-gray-700 mt-6">{data.description}</p>
 
-          <Button size={'lg'} className="w-full mt-5">
-            <ShoppingBag className="mr-4 h-5 w-5" /> Adicionar ao carrinho
-          </Button>
+          <form action={addProducttoShoppingCart}>
+            <ShoppingBagButton />
+          </form>
         </div>
       </div>
 

@@ -1,20 +1,20 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ShoppingBag } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 
 interface buttonProps {
   text: string;
   variant?:
-    | 'default'
-    | 'destructive'
-    | 'outline'
-    | 'secondary'
-    | 'ghost'
-    | 'link'
-    | null
-    | undefined;
+  | 'default'
+  | 'destructive'
+  | 'outline'
+  | 'secondary'
+  | 'ghost'
+  | 'link'
+  | null
+  | undefined;
 }
 export function SubmitButton({ text, variant }: buttonProps) {
   const { pending } = useFormStatus();
@@ -32,4 +32,36 @@ export function SubmitButton({ text, variant }: buttonProps) {
       )}
     </>
   );
+}
+
+export function ShoppingBagButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <>
+      {pending ? (
+        <Button disabled size={'lg'} className="w-full mt-5">
+          <Loader2 className="mr-4 h-5 w-5 animate-spin" /> Por favor, aguarde
+        </Button>
+      ) : (
+        <Button size={'lg'} className="w-full mt-5" type='submit'>
+          <ShoppingBag className="mr-4 h-5 w-5" /> Adicionar ao carrinho
+        </Button>
+      )}
+    </>
+  )
+}
+
+export function DeleteItem() {
+  const { pending } = useFormStatus();
+
+  return (
+    <>
+      {pending ? (
+        <button disabled className='font-medium text-primary text-end'>Removendo...</button>
+      ) : (
+        <button type="submit" className='font-medium text-primary text-end'>Remover</button>
+      )}
+    </>
+  )
 }
