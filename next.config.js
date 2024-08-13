@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // reactStrictMode: false,
   webpack: (config) => {
     config.module.rules.push({
       test: /\.html$/,
@@ -12,7 +13,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'localhost',
+        hostname: 'utfs.io',
         port: '', // If applicable, add the port number here
         pathname: '/**', // Allow all paths
       },

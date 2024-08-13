@@ -8,6 +8,7 @@ import { delItem } from "./actions";
 import { DeleteItem } from "@/app/components/SubmitButtons";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import { checkOut } from "../actions";
 
 export default async function BagRoute() {
     const user = await currentUser();
@@ -56,7 +57,7 @@ export default async function BagRoute() {
                             <div className="ml-5 flex justify-between w-full font-medium">
                                 <p>{item.name}</p>
                                 <div className="flex flex-col h-full justify-between">
-                                    
+
                                     <div className="flex items-center gap-x-2">
                                         <p>{item.quantity} x</p>
                                         <p>R$ {item.price}</p>
@@ -77,7 +78,9 @@ export default async function BagRoute() {
                             <p>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPrice)}</p>
                         </div>
 
-                        <Button size={"lg"} className="w-full mt-5">Confirmar</Button>
+                        <form action={checkOut}>
+                            <Button size={"lg"} className="w-full mt-5">Confirmar</Button>
+                        </form>
                     </div>
                 </div>
             )}
