@@ -3,9 +3,11 @@
 import { currentUser } from '@/lib/auth';
 import { Cart } from '@/lib/interfaces';
 import { redis } from '@/lib/redis';
+import { stripe } from '@/lib/stripe';
 import { PrismaClient } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import Stripe from 'stripe';
 
 
 export async function getFeaturedProducts() {
@@ -99,4 +101,44 @@ export async function addItem(productId: string) {
   await redis.set(`cart-${user.id}`, myCart);
 
   revalidatePath("/", "layout")
+}
+
+export async function checkOut() {
+  const user = await currentUser();
+
+  if (!user) {
+    return redirect("/");
+  }
+
+  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+
+  if (cart && cart.items) {
+
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = cart.items.map((item) => {
+      if (!item.price || !item.name || !item.quantity || !item.imageString) {
+        throw new Error("Item data is incomplete.");
+      }
+
+      return {
+        price_data: {
+          currency: 'brl',
+          unit_amount: item.price * 100,
+          product_data: {
+            name: item.name,
+            images: [item.imageString],
+          }
+        },
+        quantity: item.quantity
+      };
+    });
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      line_items: lineItems,
+      success_url: 'http://localhost:3000/payment/success',  
+      cancel_url: 'http://localhost:3000/payment/cancel'     
+    });
+
+    return redirect(session.url as string);
+  }
 }
