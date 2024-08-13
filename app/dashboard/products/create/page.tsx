@@ -1,6 +1,5 @@
 'use client';
 
-import { createProduct } from '@/app/actions';
 import ImageUpload from '@/components/imageUpload/ImageUpload';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,12 +26,13 @@ import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { productSchema } from '@/lib/zodSchemas';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { categories } from '@/lib/categories';
 import { SubmitButton } from '@/app/components/SubmitButtons';
+import { productSchema } from '@/schemas';
+import { createProduct } from '../actions';
 
 export default function ProductCreateRoute() {
   const [images, setImages] = useState<string[]>([]);

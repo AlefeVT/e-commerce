@@ -22,60 +22,53 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { MoreHorizontal, PlusCircle } from 'lucide-react';
-import Link from 'next/link';
+import { MoreHorizontal, PlusCircle, User2 } from 'lucide-react';
 import Image from 'next/image';
-import { getProducts } from './actions';
+import Link from 'next/link';
+import { getBanners } from './actions';
 
-export default async function ProductRoute() {
-  const data = await getProducts();
+export default async function BannerRoute() {
+  const data = await getBanners();
+
   return (
     <>
       <div className="flex items-center justify-end">
-        <Button asChild className="flex items-center gap-x-2">
-          <Link href={'/dashboard/products/create'}>
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>Adicionar Produto</span>
+        <Button asChild className="flex gap-x-2">
+          <Link href={'/dashboard/banner/create'}>
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span>Adicionar Banner</span>
           </Link>
         </Button>
       </div>
+
       <Card className="mt-5">
         <CardHeader>
-          <CardTitle>Produtos</CardTitle>
-          <CardDescription>
-            Gerencie seus produtos e visualize seu desempenho de vendas
-          </CardDescription>
+          <CardTitle>Banners</CardTitle>
+          <CardDescription>Gerencie os banners da sua loja</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Imagem</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Preço</TableHead>
-                <TableHead>Data</TableHead>
+                <TableHead>Title</TableHead>
                 <TableHead className="text-end">Ações</TableHead>
               </TableRow>
             </TableHeader>
+
             <TableBody>
               {data.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>
                     <Image
                       alt="Imagem do Produto"
-                      src={item.images[0]}
-                      height={64}
+                      src={item.imageString}
                       width={64}
-                      className="rounded-md object-cover h-16 w-16"
+                      height={64}
+                      className="rounded-lg object-cover h-16 w-16"
                     />
                   </TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.status}</TableCell>
-                  <TableCell>R$ {item.price}</TableCell>
-                  <TableCell>
-                    {new Intl.DateTimeFormat('pt-BR').format(item.createdAt)}
-                  </TableCell>
+                  <TableCell className="font-medium">{item.title}</TableCell>
                   <TableCell className="text-end">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -87,12 +80,7 @@ export default async function ProductRoute() {
                         <DropdownMenuLabel>Ações</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/products/${item.id}`}>
-                            Editar
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/products/${item.id}/delete`}>
+                          <Link href={`/dashboard/banner/${item.id}/delete`}>
                             Deletar
                           </Link>
                         </DropdownMenuItem>

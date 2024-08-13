@@ -7,26 +7,27 @@ import { toast } from 'sonner';
 import { saveImageToPublic } from '@/app/actions';
 
 interface ImageUploadProps {
-  onClientUploadComplete: (res: { url: string }[]) => void;
-  onUploadError: (e: Error) => void;
+  onClientUploadComplete?: (res: { url: string }[]) => void;
+  onUploadError?: (e: Error) => void;
+  maxFiles?: number; // Nova propriedade para definir a quantidade máxima de arquivos
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onClientUploadComplete,
   onUploadError,
+  maxFiles = 5, // Valor padrão de 5 arquivos
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const MAX_FILES = 5;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
-      if (filesArray.length + selectedFiles.length <= MAX_FILES) {
+      if (filesArray.length + selectedFiles.length <= maxFiles) {
         setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
       } else {
-        toast.error(`Você pode selecionar no máximo ${MAX_FILES} arquivos.`);
+        toast.error(`Você pode selecionar no máximo ${maxFiles} arquivos.`);
       }
     }
   };
@@ -54,11 +55,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         }
       }
       setSelectedFiles([]);
-      onClientUploadComplete(uploadedFiles);
+      if (onClientUploadComplete) {
+        onClientUploadComplete(uploadedFiles);
+      }
     } catch (error) {
       console.error(error);
       toast.error('Erro ao carregar imagens.');
-      onUploadError(error as Error);
+      if (onUploadError) {
+        onUploadError(error as Error);
+      }
     } finally {
       setLoading(false);
     }
