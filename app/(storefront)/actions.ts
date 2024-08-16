@@ -9,7 +9,6 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import Stripe from 'stripe';
 
-
 export async function getFeaturedProducts() {
   const prisma = new PrismaClient();
   const data = await prisma.product.findMany({
@@ -39,7 +38,7 @@ export async function addItem(productId: string) {
   const user = await currentUser();
 
   if (!user) {
-    return redirect("/");
+    return redirect('/');
   }
 
   let cart: Cart | null = await redis.get(`cart-${user.id}`);
@@ -72,9 +71,9 @@ export async function addItem(productId: string) {
           imageString: selectedProduct.images[0],
           name: selectedProduct.name,
           quantity: 1,
-        }
+        },
       ],
-    }
+    };
   } else {
     let itemFound = false;
 
@@ -84,7 +83,7 @@ export async function addItem(productId: string) {
         item.quantity += 1;
       }
 
-      return item
+      return item;
     });
 
     if (!itemFound) {
@@ -94,49 +93,49 @@ export async function addItem(productId: string) {
         name: selectedProduct.name,
         price: selectedProduct.price,
         quantity: 1,
-      })
+      });
     }
   }
 
   await redis.set(`cart-${user.id}`, myCart);
 
-  revalidatePath("/", "layout")
+  revalidatePath('/', 'layout');
 }
 
 export async function checkOut() {
   const user = await currentUser();
 
   if (!user) {
-    return redirect("/");
+    return redirect('/');
   }
 
   let cart: Cart | null = await redis.get(`cart-${user.id}`);
 
   if (cart && cart.items) {
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
+      cart.items.map((item) => {
+        if (!item.price || !item.name || !item.quantity || !item.imageString) {
+          throw new Error('Item data is incomplete.');
+        }
 
-    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = cart.items.map((item) => {
-      if (!item.price || !item.name || !item.quantity || !item.imageString) {
-        throw new Error("Item data is incomplete.");
-      }
-
-      return {
-        price_data: {
-          currency: 'brl',
-          unit_amount: item.price * 100,
-          product_data: {
-            name: item.name,
-            images: [item.imageString],
-          }
-        },
-        quantity: item.quantity
-      };
-    });
+        return {
+          price_data: {
+            currency: 'brl',
+            unit_amount: item.price * 100,
+            product_data: {
+              name: item.name,
+              images: [item.imageString],
+            },
+          },
+          quantity: item.quantity,
+        };
+      });
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
-      success_url: 'http://localhost:3000/payment/success',  
-      cancel_url: 'http://localhost:3000/payment/cancel'     
+      success_url: 'http://localhost:3000/payment/success',
+      cancel_url: 'http://localhost:3000/payment/cancel',
     });
 
     return redirect(session.url as string);

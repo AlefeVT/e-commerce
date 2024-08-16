@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label';
 import { bannerSchema } from '@/schemas';
 import { useForm } from '@conform-to/react';
 import { parseWithZod } from '@conform-to/zod';
-import { ChevronLeft, XIcon } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -75,7 +75,7 @@ export default function BannerRoute() {
               </p>
             </div>
 
-            {/* <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-3">
               <Label>Imagem</Label>
               <input
                 type="hidden"
@@ -93,14 +93,25 @@ export default function BannerRoute() {
                   className="w-[200px] h-[200px] object-cover border rounded-lg"
                 />
               ) : (
-                <ImageUpload
+                // <ImageUpload
+                //   onClientUploadComplete={(res) => {
+                //     setImages(res[0].url);
+                //   }}
+                //   onUploadError={() => {
+                //     toast.error('Algo deu errado!');
+                //   }}
+                //   maxFiles={1}
+                // />
+
+                <UploadDropzone
+                  endpoint="bannerImageRoute"
                   onClientUploadComplete={(res) => {
                     setImages(res[0].url);
                   }}
-                  onUploadError={() => {
-                    toast.error('Algo deu errado!');
+                  onUploadError={(error) => {
+                    console.error('Erro no upload:', error);
+                    toast.error('Falha ao enviar as imagens');
                   }}
-                  maxFiles={1}
                 />
               )}
 
@@ -110,38 +121,6 @@ export default function BannerRoute() {
                   ? 'Este campo é obrigatório'
                   : fields.imageString.errors?.join(', ')}
               </p>
-            </div> */}
-
-            <div className="flex flex-col gap-3">
-              <Label>Imagens</Label>
-              {images.length > 0 ? (
-                <div className='flex gap-5'>
-                  {images.map((image, index) => (
-                    <div key={index} className='relative w-[100px] h-[100px]'>
-                      <Image height={100} width={100} src={image} alt='Imagem do Produto' className='w-full h-full object-cover rounded-lg border' />
-
-                      <button className='absolute -top-3 -right-3 bg-red-500 p-2 rounded-lg text-white'>
-                        <XIcon className='w-3 h-3' />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <UploadDropzone endpoint='imageUploader'
-                  // content={{
-                  //   label: "Arraste e solte seus arquivos aqui ou clique para selecionar",
-                  //   button: "Enviar Arquivos",
-                  // }}
-                  onClientUploadComplete={(res) => {
-                    setImages(res.map((r) => r.url));
-                  }}
-                  onUploadError={(error) => {
-                    console.error("Erro no upload:", error);
-                    toast.error('Falha ao enviar as imagens');
-                  }}
-
-                />
-              )}
             </div>
           </div>
         </CardContent>

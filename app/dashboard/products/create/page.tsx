@@ -103,7 +103,7 @@ export default function ProductCreateRoute() {
 
               <p className="text-red-500">
                 {fields.description.errors &&
-                  fields.description.errors.includes('Required')
+                fields.description.errors.includes('Required')
                   ? 'Este campo é obrigatório'
                   : fields.description.errors?.join(', ')}
               </p>
@@ -123,9 +123,9 @@ export default function ProductCreateRoute() {
                 {fields.price.errors && fields.price.errors.includes('Required')
                   ? 'Este campo é obrigatório'
                   : fields.price.errors &&
-                    fields.price.errors.includes(
-                      'Number must be greater than or equal to 1'
-                    )
+                      fields.price.errors.includes(
+                        'Number must be greater than or equal to 1'
+                      )
                     ? 'O número deve ser maior ou igual a 1'
                     : fields.price.errors?.join(', ')}
               </p>
@@ -141,7 +141,7 @@ export default function ProductCreateRoute() {
 
               <p className="text-red-500">
                 {fields.isFeatured.errors &&
-                  fields.isFeatured.errors.includes('Required')
+                fields.isFeatured.errors.includes('Required')
                   ? 'Este campo é obrigatório'
                   : fields.isFeatured.errors?.join(', ')}
               </p>
@@ -166,7 +166,7 @@ export default function ProductCreateRoute() {
 
               <p className="text-red-500">
                 {fields.status.errors &&
-                  fields.status.errors.includes('Required')
+                fields.status.errors.includes('Required')
                   ? 'Este campo é obrigatório'
                   : fields.status.errors?.join(', ')}
               </p>
@@ -193,7 +193,7 @@ export default function ProductCreateRoute() {
 
               <p className="text-red-500">
                 {fields.status.errors &&
-                  fields.status.errors.includes('Required')
+                fields.status.errors.includes('Required')
                   ? 'Este campo é obrigatório'
                   : fields.status.errors?.join(', ')}
               </p>
@@ -212,38 +212,48 @@ export default function ProductCreateRoute() {
               <div className="flex flex-col gap-3">
                 <Label>Imagens</Label>
                 {images.length > 0 ? (
-                  <div className='flex gap-5'>
+                  <div className="flex gap-5">
                     {images.map((image, index) => (
-                      <div key={index} className='relative w-[100px] h-[100px]'>
-                        <Image height={100} width={100} src={image} alt='Imagem do Produto' className='w-full h-full object-cover rounded-lg border' />
+                      <div key={index} className="relative w-[100px] h-[100px]">
+                        <Image
+                          height={100}
+                          width={100}
+                          src={image}
+                          alt="Imagem do Produto"
+                          className="w-full h-full object-cover rounded-lg border"
+                        />
 
-                        <button className='absolute -top-3 -right-3 bg-red-500 p-2 rounded-lg text-white'>
-                          <XIcon className='w-3 h-3' />
+                        <button
+                          onClick={() => handleDelete(index)}
+                          className="absolute -top-3 -right-3 bg-red-500 p-2 rounded-lg text-white"
+                          type="button"
+                        >
+                          <XIcon className="w-3 h-3" />
                         </button>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <UploadDropzone endpoint='imageUploader' 
-                  // content={{
-                  //   label: "Arraste e solte seus arquivos aqui ou clique para selecionar",
-                  //   button: "Enviar Arquivos",
-                  // }}
-                  onClientUploadComplete={(res) => {
-                    setImages(res.map((r) => r.url));
-                }} 
-                onUploadError={(error) => {
-                    console.error("Erro no upload:", error);
-                    toast.error('Falha ao enviar as imagens');
-                }}
-                
+                  <UploadDropzone
+                    endpoint="imageUploader"
+                    // content={{
+                    //   label: "Arraste e solte seus arquivos aqui ou clique para selecionar",
+                    //   button: "Enviar Arquivos",
+                    // }}
+                    onClientUploadComplete={(res) => {
+                      setImages(res.map((r) => r.url));
+                    }}
+                    onUploadError={(error) => {
+                      console.error('Erro no upload:', error);
+                      toast.error('Falha ao enviar as imagens');
+                    }}
                   />
                 )}
               </div>
 
               <p className="text-red-500">
                 {fields.images.errors &&
-                  fields.images.errors.includes('Required')
+                fields.images.errors.includes('Required')
                   ? 'Este campo é obrigatório'
                   : fields.images.errors?.join(', ')}
               </p>

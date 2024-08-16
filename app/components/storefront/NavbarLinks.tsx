@@ -32,11 +32,22 @@ export const navbarLinks = [
   },
 ];
 
-export function NavbarLinks() {
+export function NavbarLinks({ role }: any) {
   const location = usePathname();
+
+  // Adiciona o link para Dashboard se o usuário for admin
+  const links = [...navbarLinks];
+  if (role === 'ADMIN') {
+    links.push({
+      id: 5,
+      name: 'Dashboard',
+      href: '/dashboard',
+    });
+  }
+
   return (
     <div className="hidden md:flex justify-center items-center gap-x-2 ml-8">
-      {navbarLinks.map((item) => (
+      {links.map((item) => (
         <Link
           href={item.href}
           key={item.id}

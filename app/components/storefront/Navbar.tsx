@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { NavbarLinks } from './NavbarLinks';
-import { currentUser } from '@/lib/auth';
+import { currentRole, currentUser } from '@/lib/auth';
 import { ShoppingBagIcon } from 'lucide-react';
 import { UserDropdown } from './UserDropdown';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,8 @@ import { Cart } from '@/lib/interfaces';
 
 export async function Navbar() {
   const user = await currentUser();
+
+  const role = await currentRole();
 
   const cart: Cart | null = await redis.get(`cart-${user?.id}`);
 
@@ -21,7 +23,7 @@ export async function Navbar() {
         <Link href={'/'}>
           <Logo />
         </Link>
-        <NavbarLinks />
+        <NavbarLinks role={role} />
       </div>
 
       <div className="flex items-center">
@@ -29,7 +31,9 @@ export async function Navbar() {
           <>
             <Link href={'/bag'} className="group p-2 flex items-center mr-2">
               <ShoppingBagIcon className="w-6 h-6 text-gray-400 group-hover:text-gray-500" />
-              <span className="ml-2 text-sm font-medium text-gray-700">{total}</span>
+              <span className="ml-2 text-sm font-medium text-gray-700">
+                {total}
+              </span>
             </Link>
 
             <UserDropdown

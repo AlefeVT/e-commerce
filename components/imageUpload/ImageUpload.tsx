@@ -9,13 +9,13 @@ import { saveImageToPublic } from '@/app/actions';
 interface ImageUploadProps {
   onClientUploadComplete?: (res: { url: string }[]) => void;
   onUploadError?: (e: Error) => void;
-  maxFiles?: number; 
+  maxFiles?: number;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   onClientUploadComplete,
   onUploadError,
-  maxFiles = 5, 
+  maxFiles = 5,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);

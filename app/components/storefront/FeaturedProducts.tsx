@@ -3,7 +3,6 @@ import { LoadingProductCard, ProductCard } from './ProductCard';
 import { Suspense } from 'react';
 
 export async function FeaturedProduct() {
-
   return (
     <>
       <h2 className="text-2xl font-extrabold tracking-tight">
@@ -25,7 +24,7 @@ async function LoadFeaturedProducts() {
         <ProductCard key={item.id} item={item} />
       ))}
     </div>
-  )
+  );
 }
 
 function LoadingRows() {
@@ -35,5 +34,5 @@ function LoadingRows() {
       <LoadingProductCard />
       <LoadingProductCard />
     </div>
-  )
+  );
 }
