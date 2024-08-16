@@ -4,7 +4,7 @@ import './globals.css';
 import { Toaster } from 'sonner';
 import { extractRouterConfig } from 'uploadthing/server';
 import { ourFileRouter } from './api/uploadthing/core';
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
 
 const inter = Inter({ subsets: ['latin'] });
 
