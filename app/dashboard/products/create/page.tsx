@@ -1,6 +1,5 @@
 'use client';
 
-import ImageUpload from '@/components/imageUpload/ImageUpload';
 import { Button } from '@/components/ui/button';
 import {
   Card,

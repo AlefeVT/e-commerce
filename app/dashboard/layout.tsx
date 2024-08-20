@@ -1,17 +1,23 @@
 import { ReactNode } from 'react';
 import { DashboardNavigation } from '../components/dashboard/DashboardNavigation';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { CircleUser, MenuIcon } from 'lucide-react';
+import { MenuIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { UserDropdown } from '../components/storefront/UserDropdown';
+import { currentUser } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export default async function DashboardLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const user = await currentUser();
+
+  if (!user) {
+    redirect('/');
+  }
+
   return (
     <div className="flex w-full flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-white">
@@ -36,22 +42,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           </SheetContent>
         </Sheet>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant={'secondary'}
-              size={'icon'}
-              className="rounded-full"
-            >
-              <CircleUser className="w-5 h-5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuLabel>Desconectar</DropdownMenuLabel>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <UserDropdown
+          email={user.email as string}
+          name={user.name as string}
+          userImage={user.image ?? `https://avatar.vercel.sh/${user.name}`}
+        />
       </header>
       <main className="my-5">{children}</main>
     </div>

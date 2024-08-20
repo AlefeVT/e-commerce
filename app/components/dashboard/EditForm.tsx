@@ -249,7 +249,7 @@ export function EditForm({ data }: iAppProps) {
                   onClientUploadComplete={(res) => {
                     setImages(res.map((r) => r.url));
                   }}
-                  onUploadError={(e) => {
+                  onUploadError={() => {
                     toast.error('Algo deu errado!');
                   }}
                 />

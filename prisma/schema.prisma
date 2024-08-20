@@ -20,6 +20,10 @@ model User {
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+
+  orders Order[]
+
+  createdAt DateTime @default(now())
 }
 
 model Account {
@@ -94,6 +98,17 @@ model Banner {
   id          String @id @default(cuid())
   title       String
   imageString String
+
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id     String @id @default(cuid())
+  status String @default("pending")
+  amount Int
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
 
   createdAt DateTime @default(now())
 }

@@ -41,7 +41,7 @@ export async function addItem(productId: string) {
     return redirect('/');
   }
 
-  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+  const cart: Cart | null = await redis.get(`cart-${user.id}`); // Substituído por const
 
   const selectedProduct = await prisma.product.findUnique({
     select: {
@@ -109,7 +109,7 @@ export async function checkOut() {
     return redirect('/');
   }
 
-  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+  const cart: Cart | null = await redis.get(`cart-${user.id}`); // Substituído por const
 
   if (cart && cart.items) {
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
@@ -136,6 +136,9 @@ export async function checkOut() {
       line_items: lineItems,
       success_url: 'http://localhost:3000/payment/success',
       cancel_url: 'http://localhost:3000/payment/cancel',
+      metadata: {
+        userId: user.id,
+      },
     });
 
     return redirect(session.url as string);

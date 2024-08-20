@@ -1,7 +1,6 @@
 import { ImageSlider } from '@/app/components/storefront/ImageSlider';
 import { getProduct } from './actions';
-import { ShoppingBag, StarIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { StarIcon } from 'lucide-react';
 import { FeaturedProduct } from '@/app/components/storefront/FeaturedProducts';
 import { addItem } from '../../actions';
 import { ShoppingBagButton } from '@/app/components/SubmitButtons';
