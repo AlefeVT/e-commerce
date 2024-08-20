@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Logo } from '../logo/logo';
 
 interface HeaderProps {

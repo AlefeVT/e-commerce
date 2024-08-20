@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import todos from '@/public/todos.png';
-import masculino from '@/public/masculino.png';
-import feminino from '@/public/feminino.png';
+import todos from '@/public/todos.webp';
+import masculino from '@/public/masculino.webp';
+import feminino from '@/public/feminino.webp';
 
 export function CategoriesSelection() {
   return (

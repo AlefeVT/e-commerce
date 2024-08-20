@@ -1,7 +1,6 @@
 'use client';
 
 import { SubmitButton } from '@/app/components/SubmitButtons';
-import ImageUpload from '@/components/imageUpload/ImageUpload';
 import { Button } from '@/components/ui/button';
 import {
   Card,

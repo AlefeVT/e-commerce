@@ -13,8 +13,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { getOrders } from './actions';
 
-export default function OrdersPage() {
+export default async function OrdersPage() {
+  const data = await getOrders();
+
+  const formatStatus = (status: string) => {
+    if (status === 'pending') return 'Pendente';
+    if (status === 'complete') return 'Completa';
+    return status;
+  };
+
   return (
     <Card>
       <CardHeader className="px-7">
@@ -33,18 +42,27 @@ export default function OrdersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <p className="font-medium">João</p>
-                <p className="hidden md:flex text-sm text-muted-foreground">
-                  text@text.com
-                </p>
-              </TableCell>
-              <TableCell>Venda</TableCell>
-              <TableCell>Sucesso</TableCell>
-              <TableCell>2024-06-15</TableCell>
-              <TableCell className="text-right">R$250.00</TableCell>
-            </TableRow>
+            {data.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  <p className="font-medium">{item.User?.name}</p>
+                  <p className="hidden md:flex text-sm text-muted-foreground">
+                    {item.User?.email}
+                  </p>
+                </TableCell>
+                <TableCell>Compra</TableCell>
+                <TableCell>{formatStatus(item.status)}</TableCell>
+                <TableCell>
+                  {new Intl.DateTimeFormat('pt-br').format(item.createdAt)}
+                </TableCell>
+                <TableCell className="text-right">
+                  R$
+                  {new Intl.NumberFormat('pt-BR', {
+                    minimumFractionDigits: 2,
+                  }).format(item.amount / 100)}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </CardContent>
